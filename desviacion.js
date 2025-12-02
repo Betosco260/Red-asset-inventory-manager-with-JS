@@ -7,7 +7,7 @@ const CREDS = { user: "admin", pass: "admin123" };
 
 let TOKEN = null;
 
-// IDs correctos basado en tu mensaje
+
 const IDS = {
     server1:  "691b9b04e19e0cbf674dee35",
     server2:  "691b9b04e19e0cbf674dee39",
@@ -49,43 +49,40 @@ async function updateBaseline(assetId, config) {
 }
 
 
-// Servidor – añade puertos y servicios inesperados
+
 const desviacionServer = {
-    puertosPermitidos: [22, 80, 443, 9999],  // puerto indebido
-    serviciosObligatorios: ["ssh", "httpd", "backdoorService"],  // servicio indebido
-    versionEsperada: "Ubuntu 20.04" // versión incorrecta
+    puertosPermitidos: [22, 80, 443, 9999],
+    serviciosObligatorios: ["ssh", "httpd", "backdoorService"],
+    versionEsperada: "Ubuntu 20.04"
 };
 
-// Router – rutas sospechosas + protocolo habilitado indebido
 const desviacionRouter = {
     rutasEstaticas: [
-        { destino: "0.0.0.0/0", via: "10.0.0.1" },  // default route válida
-        { destino: "5.5.5.0/24", via: "10.0.0.123" } // ruta inventada
+        { destino: "0.0.0.0/0", via: "10.0.0.1" },  
+        { destino: "5.5.5.0/24", via: "10.0.0.123" } 
     ],
-    protocolos: ["OSPF", "BGP"], // protocolo no esperado
+    protocolos: ["OSPF", "BGP"],
     interfaces: [
         { nombre: "eth0", estado: "up" },
         { nombre: "eth1", estado: "down" },
     ]
 };
 
-// Firewall – reglas indebidas
 const desviacionFirewall = {
     reglas: [
         { action: "allow", proto: "tcp", port: 22 },
         { action: "allow", proto: "tcp", port: 443 },
-        { action: "allow", proto: "tcp", port: 3389 }, // RDP expuesto 🚨
-        { action: "allow", proto: "tcp", port: 23 }    // Telnet abierto 🚨
+        { action: "allow", proto: "tcp", port: 3389 },�
+        { action: "allow", proto: "tcp", port: 23 } 
     ]
 };
 
-// Switch – VLAN indebida + puerto mal asignado
 const desviacionSwitch = {
-    vlans: [10, 20, 666], // VLAN inventada
+    vlans: [10, 20, 666], 
     puertos: [
         { id: 1, vlan: 10 },
         { id: 2, vlan: 20 },
-        { id: 3, vlan: 666 } // puerto indebido
+        { id: 3, vlan: 666 } 
     ]
 };
 
@@ -94,7 +91,6 @@ const desviacionSwitch = {
     try {
         await login();
 
-        // Aplicar desviaciones por tipo
         await updateBaseline(IDS.server1, desviacionServer);
         await updateBaseline(IDS.server2, desviacionServer);
         await updateBaseline(IDS.router1, desviacionRouter);
