@@ -1,4 +1,4 @@
-// poblar.js
+
 const axios = require("axios");
 const S1 = "http://localhost:4001";
 const S3 = "http://localhost:4003";
@@ -83,7 +83,6 @@ const assets = [
 async function crearActivosYBaselines() {
   for (const a of assets) {
     try {
-      // 1) crear activo en inventory (S3) vía S1 proxy
       const respA = await axios.post(`${S1}/activos`, {
         name: a.name,
         ip: a.ip,
@@ -94,7 +93,6 @@ async function crearActivosYBaselines() {
       const id = respA.data.activo ? respA.data.activo._id : respA.data._id;
       console.log(`Activo creado: ${a.name} -> id=${id}`);
 
-      // 2) crear baseline en S3 (assetId debe ser el id retornado)
       const respB = await axios.post(`${S3}/baseline`, {
         assetId: id,
         type: a.type,
